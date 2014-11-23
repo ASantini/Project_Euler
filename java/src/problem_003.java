@@ -21,6 +21,7 @@ public class problem_003 {
 			}
 		}
 		System.out.println(test);
+		
 	
 	} // end main
 	
@@ -34,6 +35,7 @@ public class problem_003 {
 		private KnownPrimes() {
 			knownPrimes = new ArrayList<Long>();
 			knownPrimes.add(new Long(2));
+			knownPrimes.add(new Long(3)); // added so that 2 can be added in nextPrime()
 			index = 0;
 		} // end KnownPrimes const
 		
@@ -45,18 +47,18 @@ public class problem_003 {
 		} // end getNext
 		
 		private Long nextPrime() {
-			long test = knownPrimes.get(knownPrimes.size() -1).longValue() + 1;
-			boolean cont = true;
-			while(cont){
-				ListIterator<Long> iter = knownPrimes.listIterator(0);
-				while(iter.hasNext()){
-					long denom = iter.next().longValue();
-					if(test % denom == 0) {
-						test++;
-						break;
-					}
+			long test = knownPrimes.get(knownPrimes.size() -1).longValue() + 2;
+			long sqrt = (long)Math.sqrt(test);
+			ListIterator<Long> iter = knownPrimes.listIterator(1);
+			while(iter.hasNext()){
+				long denom = iter.next().longValue();
+				if(denom > sqrt) {
+					break;
+				} else if(test % denom == 0) {
+					test += 2;
+					sqrt = (long)Math.sqrt(test);
+					iter = knownPrimes.listIterator(1);
 				}
-				cont = false;
 			}
 			return new Long(test);
 		}
