@@ -17,35 +17,30 @@ def resetFile(filename):
 	inFile.write('3\n')
 	return inFile
 	
-def getNextPrime(index, kpFile):
+def getNextPrime(lastPrime ,kpFile):
 	returnNum = None
+	endOfFile = kpFile.tell()
 	try:
-		kpFile.seek(index)
-		returnNum = int(kpFile.readline())
+		returnNum = int(kpFile.readline()) 
 	except:
-		kpFile.seek(index - 1)
-		test = int(kpFile.readline()) + 2
+		test = lastPrime + 2
 		testSqrt = math.sqrt(test)
-		testIndex = 1
+		kpFile.seek(0)
 		while(True):
-			kpFile.seek(testIndex)
-			testIndex += 1
-			demon = int(kpFile.readline())
-			print demon
+			
+			denom = int(kpFile.readline())
 			if denom > testSqrt:
-				kpFile.seek(index)
+				kpFile.seek(endOfFile)
 				kpFile.write(str(test) + '\n')
 				returnNum = test
 				break
-			elif test % demon == 0:
+			elif test % denom == 0:
 				test += 2
 				testSqrt = math.sqrt(test)
-				testIndex = 1
+				kpFile.seek(0)
 			
 	return returnNum
 	
-
-n = int(sys.argv[1])
 # open file and test to make sure it is valid.
 filename = 'kp.txt'
 kp = open(filename, "a+")
@@ -64,18 +59,16 @@ else:
 	if(test1 != 2 or test2 != 3):
 		kp = resetFile(filename)
 	
-index = 0
-kp.seek(index)
+kp.seek(0)
 test_num = int(kp.readline())
 
+n = int(sys.argv[1])
 while(n != 1):
 	if(n % test_num == 0):
 		n /= test_num
 	else:
-		index += 1
-		test_num = getNextPrime(index,kp)
-			
-	
+		test_num = getNextPrime(test_num, kp)
+		
 print(test_num)
 
 
